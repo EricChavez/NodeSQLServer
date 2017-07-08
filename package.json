@@ -1,0 +1,16 @@
+{
+  "name": "node-mssql",
+  "version": "1.0.0",
+  "description": "API REST FOR SQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ERIC CHAVEZ",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mssql": "^4.0.4"
+  }
+}
