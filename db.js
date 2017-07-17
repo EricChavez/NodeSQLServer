@@ -2,7 +2,7 @@ var mssql = require('mssql');
 var dbConfig = {
     user: 'saB',
     password: "06011975",
-    server: '192.168.50.25',
+    server: 'BLANCA-PC',
     database: 'SoftvNew'
 };
 

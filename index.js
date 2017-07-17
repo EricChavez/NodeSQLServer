@@ -2,7 +2,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var db = require('./db');
 var user = require('./userCtrl');
+var auth = require('./authCtrl');
 var app = express();
+
 
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
@@ -18,6 +20,5 @@ var server = app.listen(process.env.PORT || 50, function () {
     console.log('App now running on port', port);
 });
 
-app.get('/api/users', function (req, res) {
-    user.get(req, res);
-});
+app.post('/api/authenticate', auth.singIn);
+app.post('/api/singup', auth.singUp);
