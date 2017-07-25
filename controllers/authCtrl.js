@@ -1,9 +1,11 @@
 var sql = require('mssql')
-var service = require('./services')
-var config = require('./config');
+var service = require('../services')
+var config = require('../config');
 
 var singIn = function (req, res) {
     var request = new sql.Request();
+    console.log(req.body)
+    console.log(req)
     request.input('user', sql.VarChar(50), req.body.user);
     request.input('pass', sql.BigInt, req.body.pass);
     request.output('status', sql.Int);
@@ -11,7 +13,7 @@ var singIn = function (req, res) {
         if (err) {
             res.send(err);
         } else {
-            console.log(result);
+            
             if (result.output.status == 1) {
                 res.status(200).send({
                     success: true,
@@ -25,7 +27,7 @@ var singIn = function (req, res) {
                     'message': 'Authentication failed.'
                 });
             } else {
-                res.status(401).send({
+                res.status(404).send({
                     'success': false,
                     'message': 'Authentication failed. User not found.'
                 });

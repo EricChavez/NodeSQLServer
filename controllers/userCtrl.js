@@ -1,4 +1,4 @@
-var query = require('./query');
+var query = require('../query');
 var sql = require('mssql')
 
 

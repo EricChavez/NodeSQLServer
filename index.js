@@ -1,12 +1,9 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var db = require('./db');
-var user = require('./userCtrl');
-var auth = require('./authCtrl');
-var app = express();
 
 
-app.use(bodyParser.json());
+const app=require('./app');
+var mssql = require('mssql');
+const config=require('./config');
+
 app.use(function (req, res, next) {
     //Enabling CORS 
     res.header('Access-Control-Allow-Origin', '*');
@@ -15,10 +12,20 @@ app.use(function (req, res, next) {
     next();
 });
 
-var server = app.listen(process.env.PORT || 50, function () {
+var dbConfig = {
+    user: config.db_user,
+    password: config.db_pass,
+    server: config.db_server,
+    database: config.db_database
+};
+
+var connection = mssql.connect(dbConfig, function (err) {
+    if (err)
+        console.log('Error while connecting database :- ' + err);
+});
+
+var server = app.listen(config.port, function () {
     var port = server.address().port;
     console.log('App now running on port', port);
 });
 
-app.post('/api/authenticate', auth.singIn);
-app.post('/api/singup', auth.singUp);
