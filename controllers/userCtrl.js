@@ -1,7 +1,5 @@
 var query = require('../query');
-var sql = require('mssql')
-
-
+var sql = require('mssql');
 
 var getfilter = function (search, res) {
     var request = new sql.Request();
@@ -14,9 +12,8 @@ var getfilter = function (search, res) {
             res.send(result);
         }
     });
-}
+};
 
-module.exports = {
-  
+module.exports = {  
     getfilter
-}
+};
