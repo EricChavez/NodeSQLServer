@@ -13,10 +13,26 @@ function createToken(user) {
     return jwt.encode(payload, config.secret)
 }
 
+function GetUserMenu(ModuleSet) {
+   // console.log(ModuleSet);
+    const Modules = new Array();
+    ModuleSet.forEach(function (item) {
+        console.log(item.ModuleId);
+        if (item.ParentId == 0) {
+            item.children = [];
+            ModuleSet.forEach(function (children) {
+                console.log(children);
+                if (children.ParentId == item.ModuleId) item.children.push(children);
+            });
+          Modules.push(item);
+        }
+    });
+return Modules;
+
+}
 
 function DecodeToken(token) {
     const decoded = new Promise((resolve, reject) => {
-
         try {
             const payload = jwt.decode(token, config.secret)
             if (payload.exp <= moment().unix()) {
@@ -32,9 +48,11 @@ function DecodeToken(token) {
             })
         }
     })
-    return decoded
+    return decoded;
 }
 
 module.exports = {
-    createToken,DecodeToken
+    createToken,
+    DecodeToken,
+    GetUserMenu
 };

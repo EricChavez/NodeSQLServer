@@ -1,6 +1,6 @@
 'use strict'
 
-const service=require('../services')
+const service = require('../services');
 
 
 function isAuth(req, res, next) {
@@ -10,17 +10,19 @@ function isAuth(req, res, next) {
         });
     }
 
-    const token=req.headers.authorization.split(" ")[1]
+    const token = req.headers.authorization.split(" ")[1]
     service.DecodeToken(token)
-    .then(response=>{
-        req.user=response
-        next()
-    })
-    .catch(response=>{
-        res.status(response.status)
-    })
-    
+        .then(response => {
+            req.user = response
+            next()
+        })
+        .catch(response => {
+            res.status(response.status)
+        })
+
 
 }
 
-module.exports={isAuth}
+module.exports = {
+    isAuth
+}

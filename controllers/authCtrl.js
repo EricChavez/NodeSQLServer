@@ -1,5 +1,5 @@
-var sql = require('mssql')
-var service = require('../services')
+var sql = require('mssql');
+var service = require('../services');
 var config = require('../config');
 
 var singIn = function (req, res) {
@@ -10,10 +10,13 @@ var singIn = function (req, res) {
     request.execute('UserAuth', (err, result) => {
         if (err) res.send(err)
         if (result.output.status == true) {
+            console.log(result);
             res.status(200).send({
                 success: true,
                 message: 'Enjoy your token!',
-                token: service.createToken(req.body.user)
+                token: service.createToken(req.body.email),
+                user: req.body.email,
+                menu: service.GetUserMenu(result.recordset)
             });
         } else {
             res.status(401).send({
