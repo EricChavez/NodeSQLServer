@@ -11,13 +11,18 @@ function isAuth(req, res, next) {
     }
 
     const token = req.headers.authorization.split(" ")[1]
+
     service.DecodeToken(token)
         .then(response => {
-            req.user = response
-            next()
+            req.user = response;
+
+            next();
         })
         .catch(response => {
-            res.status(response.status)
+
+            res.status(response.status).send({
+                message: response.message
+            });
         })
 
 

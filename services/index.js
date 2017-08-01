@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-const jwt = require('jwt-simple')
-const moment = require('moment')
-const config = require('../config')
+const jwt = require('jwt-simple');
+const moment = require('moment');
+const config = require('../config');
 
 function createToken(user) {
     const payload = {
@@ -14,7 +14,7 @@ function createToken(user) {
 }
 
 function GetUserMenu(ModuleSet) {
-   // console.log(ModuleSet);
+    // console.log(ModuleSet);
     const Modules = new Array();
     ModuleSet.forEach(function (item) {
         console.log(item.ModuleId);
@@ -24,30 +24,32 @@ function GetUserMenu(ModuleSet) {
                 console.log(children);
                 if (children.ParentId == item.ModuleId) item.children.push(children);
             });
-          Modules.push(item);
+            Modules.push(item);
         }
     });
-return Modules;
+    return Modules;
 
 }
 
 function DecodeToken(token) {
     const decoded = new Promise((resolve, reject) => {
         try {
-            const payload = jwt.decode(token, config.secret)
+            const payload = jwt.decode(token, config.secret);
             if (payload.exp <= moment().unix()) {
                 reject({
                     status: 401,
                     message: 'El token ha expirado'
                 });
             }
+            resolve(payload);
         } catch (err) {
             reject({
-                status: 500,
-                message: 'El token ha expirado'
+                status: 403,
+                message: 'El token no es válido'
             })
         }
-    })
+    });
+
     return decoded;
 }
 
