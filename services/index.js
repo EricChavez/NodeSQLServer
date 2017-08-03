@@ -3,6 +3,8 @@
 const jwt = require('jwt-simple');
 const moment = require('moment');
 const config = require('../config');
+var nodemailer = require('nodemailer');
+
 
 function createToken(user) {
     const payload = {
@@ -31,6 +33,43 @@ function GetUserMenu(ModuleSet) {
 
 }
 
+function SendEmail(to, subject, text) {
+    const sent = new Promise((resolve, reject) => {
+        try {
+
+            var transporter = nodemailer.createTransport({
+                service: config.email_service,
+                auth: {
+                    user: config.email_account,
+                    pass: config.email_pass
+                }
+            });
+            var mailOptions = {
+                from: config.email_account,
+                to: to,
+                subject: subject,
+                text: text
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    reject({
+                        message: error
+                    });
+                } else {
+                    resolve({
+                        message: 'Email sent: ' + info.response
+                    });
+                }
+            });
+        } catch (err) {
+            reject({
+                message: err
+            });
+        }
+    });
+
+}
+
 function DecodeToken(token) {
     const decoded = new Promise((resolve, reject) => {
         try {
@@ -56,5 +95,6 @@ function DecodeToken(token) {
 module.exports = {
     createToken,
     DecodeToken,
-    GetUserMenu
+    GetUserMenu,
+    SendEmail
 };

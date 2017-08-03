@@ -10,7 +10,6 @@ var singIn = function (req, res) {
     request.execute('UserAuth', (err, result) => {
         if (err) res.send(err)
         if (result.output.status == true) {
-            console.log(result);
             res.status(200).send({
                 success: true,
                 message: 'Enjoy your token!',
@@ -31,7 +30,45 @@ var singUp = function (req, res) {
 
 }
 
+
+var recover = function (req, res) {
+    var request = new sql.Request();
+    request.input('email', sql.VarChar(50), req.body.email);
+    request.output('existe', sql.Bit);
+    request.execute('ValidateEmail', (err, result) => {
+        if (err) res.status(500).send({
+            message: err
+        });
+        if (result.output.existe == true) {
+            const token = service.createToken(req.body.email);
+            const text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                'http://' + req.headers.Origin + '/reset/?id' + token + '\n\n' +
+                'If you did not request this, please ignore this email and your password will remain unchanged.\n';
+            const subject = 'Recupera tu contraseña';
+            res.status(200).send({
+                message: service.SendEmail(req.body.email, subject, text)
+            });
+
+
+        } else {
+            res.status(401).send({
+                message: 'No existe una cuenta asignada al email proporcionado'
+            });
+        }
+    });
+}
+
+
+var reset= function (req, res) {
+
+}
+
+
+
 module.exports = {
     singIn,
-    singUp
+    singUp,
+    recover,
+    reset
 }
