@@ -11,7 +11,8 @@ var roleCtrl = require('../controllers/RoleCtrl')
 
 
 api.post('/authenticate', authCtrl.singIn);
-api.post('/singup',  authCtrl.singUp);
+api.post('/validate-token', authCtrl.validatetoken);
+api.post('/singup', authCtrl.singUp);
 api.post('/recover', authCtrl.recover);
 api.post('/reset', authCtrl.reset);
 api.post('/email-validation', auth.isAuth, userCtrl.emailvalidation);

@@ -8,7 +8,7 @@ var singIn = function (req, res) {
     request.input('pass', sql.VarChar, req.body.pass);
     request.output('status', sql.Bit);
     request.execute('UserAuth', (err, result) => {
-        if (err) res.send(err)
+        if (err) res.send({message:err})
         if (result.output.status == true) {
             res.status(200).send({
                 success: true,
@@ -20,13 +20,14 @@ var singIn = function (req, res) {
         } else {
             res.status(401).send({
                 'success': false,
-                'message': 'Authentication failed.'
+                'message': 'Error en la autenticación. no existe cuenta con los accesos proporcionados'
             });
         }
     });
 }
 
 var singUp = function (req, res) {
+
 
 }
 
@@ -43,7 +44,7 @@ var recover = function (req, res) {
             const token = service.createToken(req.body.email);
             const text = 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                'http://' + req.headers.Origin + '/reset/?id' + token + '\n\n' +
+                'http://localhost:4200/reset/' + token + '\n\n' +
                 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
             const subject = 'Recupera tu contraseña';
             res.status(200).send({
@@ -57,12 +58,26 @@ var recover = function (req, res) {
             });
         }
     });
-}
+};
+
+validatetoken = function (req, res) {
+    service.DecodeToken(req.body.token)
+        .then(response => {
+            res.status(200).send({
+                message: 'El token es válido'
+            });
+        })
+        .catch(response => {
+            res.status(response.status).send({
+                message: response.message
+            });
+        })
+};
 
 
-var reset= function (req, res) {
+var reset = function (req, res) {
 
-}
+};
 
 
 
@@ -70,5 +85,6 @@ module.exports = {
     singIn,
     singUp,
     recover,
-    reset
+    reset,
+    validatetoken
 }
